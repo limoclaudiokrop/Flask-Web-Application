@@ -1,0 +1,201 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>Statements</title>
+
+    {% include "header_links.html" %}
+       
+</head>
+
+<body>
+    <div class="wrapper">
+       <div style="background: white; height: 80px; margin: 0px; 
+    padding: 0 0px;  width: 100%; position: fixed; display: inline-flex;" class="">
+        <div class="row" style="margin-left: 10px; margin-top: 5px;display: inline-flex;">
+            <div class="col-2" style="margin-top: 20px">
+                <h4 style="margin-top: -5px; color: green;"><strong><a href="/dashboard">Admin Panel</a></strong></h4>
+            </div>
+             <div class="col-6 d-flex justify-content-center align-items-center" style="display: inline-flex; margin-left: 50px;">
+                <select  id="searchAreaSelectBillings" name="area" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                style=" padding-top: 8px; padding-bottom: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; width: 200px; text-align: center; margin-right: 10px;">
+                    <option selected value="">-- company --</option>
+                    {% for c in areas %}
+                    <option value="{{c[1]}}">{{c[1]}}</option>
+                    
+                    {% endfor %}
+                </select>      
+
+                <select  id="searchLocalSelect" name="area" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                style=" padding-top: 5px; padding-bottom: 5px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; width: 200px; text-align: center; margin-right: 10px;">
+                    <option selected value="">-- project -- </option>
+                </select>
+                <select  id="searchDateSelect" name="date" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                style=" padding-top: 5px; padding-bottom: 5px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; width: 200px; text-align: center; margin-right: 10px;">
+                    <option selected value="" >-- date -- </option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>      
+
+                   
+
+                <button id="searchButton" onclick="filterBillings()" type="button" class="btn" style="margin-top: -15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white; height: 30px; width: 80; padding-top: 3px">search</button>
+                <div  id="searchLoader" style="display: none;" class="loader"></div>
+                
+              
+            </div>
+            <div class="d-flex justify-content-center align-items-center" style="width: 300px !important;display: inline-flex;">
+                <p style=" color: black;">{{welcome}}</p>
+            </div>
+            
+        </div>
+    </div>
+        
+          <input id="clearanceStatus" type="hidden" value="{{status}}" >
+        
+        <div id="content" class="" style="width: 100%;">
+       
+            <!--Main layout-->
+              <div style="display: block;   margin-top: 80px; height: 100%; width: 100%; ">
+                
+                  <div class="container pt-4" >
+                      
+                      <div class="">
+                        
+
+                      </div>
+                      <div class="" style="width: 100%;">
+
+                      <div class="" style="width: 100%">
+                        <div class="">
+                            
+                            
+                           
+
+                            <table  id="billingsTable" class="table table-bordered">
+                              
+                              <tbody>
+                                <tr style="background-color: #8a8a5c; color: white;">
+                                    <td colspan="8">
+                                        <span>Transaction History</span>
+                                         
+                                    </td>
+
+                                    
+
+                                </tr>
+                                <tr style="font-size: 105%; font-weight: bold">
+                                  <td>Date</td>
+                                  <td>Company</td>
+                                  <td>Project</td>
+                                  <td>Transaction</td>
+                                  <td>Description</td>
+                                  <td>Amount</td>
+                                  {% if status == "2" %}
+                                  <td>Action</td>
+                                  {% endif %}
+                                </tr>
+                                {% set count = namespace(value=1) %}
+                                {% set tot = namespace(value=0) %}
+                                {% for c in contributions %}
+                                 <tr>
+                                 <td>{{ c[3] }}
+                                  <input id="accountId{{count.value}}" type="hidden" value="{{c[0]}}">
+                                 </td>
+                                 <td>{{c[6]}}<input id="tempAcc{{count.value}}" type="hidden" value="{{amounts[count.value-1]}}"></td>
+                                 <td>{{c[7]}}</td>
+                                  
+                                  
+                                  <td id="wd{{count.value}}">
+                                    {{c[8]}}
+                                  </td>
+                                  <td id="desc{{count.value}}">
+                                    {{c[9]}}
+                                  </td>
+                                  <td id="account{{count.value}}">{{amounts[count.value-1]}}</td>
+                                  {% if status == "2" %}
+                                  <td>
+                                    <a  id="editButton{{count.value}}" onclick="editAccount({{count.value}})" style="color: blue; margin-right: 15px;" class="tagLink font-italic ">edit</a>
+                                    <a  href="/deleteEntry?id={{c[0]}}" style="color: red; margin-right: 15px;" class="tagLink font-italic ">delete</a>
+                                  </td>
+                                    
+                                  
+                                  {% endif %}
+                                  
+                                </tr>
+                                {% set count.value = count.value + 1 %}
+                                {% if c[8] == "Deposit" %}
+                                  {% set tot.value = tot.value + c[4] %}
+                                
+                                {% endif %}
+                                {% if c[8] == "Withdraw" %}
+                                  {% set tot.value = tot.value - c[4] %}
+                                
+                                {% endif %}
+                                {% endfor %}
+                                <tr>
+                                  <td colspan="5">Total</td>
+
+                                  <td id="total">{{total}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                           
+                        </div>
+                        
+                        
+                        <!-- <form method="POST" action="">
+                          <button  type="submit" style=" border: 0px; " class="btn btn-secondary float-left rounded-0 buttonRegular">Print</button>
+                        </form> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+        </div>
+    
+
+    <!-- Modal -->
+    <form id="renameFileForm" name="renameFile" action="/renamefile" method="post" enctype="multipart/form-data">
+    <div class="modal fade " id="deleteEntryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Rename File</h5>
+          </div>
+          <div class="modal-body">
+            
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button onclick="validaterenameFileForm('{{root}}')" type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </form>
+
+   
+
+    {% include "footer_links.html" %}
+
+</body>
+
+</html>

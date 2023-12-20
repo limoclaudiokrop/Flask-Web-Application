@@ -1,0 +1,115 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Create Project</title>
+
+    {% include "header_links.html" %}
+</head>
+
+<body>
+    <div class="wrapper">
+        <div style="background: white; height: 60px; margin: 0px; 
+    padding: 0 0px; overflow: hidden; width: 100%; position: fixed;" class="">
+        <div class="row" style="margin-left: 10px; margin-top: 5px">
+            <div class="col-3" style="margin-top: 20px">
+                <h4 style="color: green;"><strong><a href="/dashboard">Admin Panel</a></strong></h4>
+            </div>
+            <div class="col-6" style="margin-top: 10px">
+                <input style="width: 100%; height: 40px; font-size: 16px; outline: none; padding-left: 5px;
+                 border: none; border-radius: 10px; background: #f5f5f5;" type="text" name="search" placeholder="search here">
+            </div>
+            <div class="col-3 d-flex justify-content-center align-items-center" style="margin-top: 20px">
+                <p style="white-space: nowrap; color: black;">{{welcome}}</p>
+            </div>
+            
+        </div>
+    </div>
+
+        <div id="content" class="main" style="width: 100%; height: 100vh;">
+
+           <!--Main layout-->
+            <div id="requirementDetails" style="margin-top: 80px;  height: 100%; width: 100%;" class="container">
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%">
+                        
+                        <div style="width: 70%; " class="border-bottom ">
+                            <span style="margin-left: 30px; border: 3px; font-size: 150%; font-weight: bold; color: #8c8c8c;">Project Details</span>
+                        </div>
+                        
+                        
+                    </div>
+                    <form name="createMemberForm" action="/createProject" method="post" enctype="multipart/form-data" onsubmit="return validateCreateEmployeeForm()">
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 0px">
+                        <div style="width: 70%; ">
+                        <p style="color: red;">{{error}}</p>
+                            
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 18px">
+                        <div style="width: 70%; ">
+                            <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">Company:</label>
+                
+                            <div>
+                                <select id="selectAreaOpt" name="area" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                style="width: 70%; padding-top: 5px; padding-bottom: 5px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959">
+                                    <option selected value="">Open this select menu</option>
+                                    {% for c in areas %}
+                                    <option value="{{c[1]}}">{{c[1]}}</option>
+                                    
+                                    {% endfor %}
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newAreaDiv" style="display: none;">
+                        <div class="d-flex justify-content-center align-items-center" style="width:100%;">
+                        <div style="width: 70%; ">
+                            <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">New Company:</label>
+                            <input style="width: 70%;" type="title" name="newArea" class="form-control" placeholder="Enter new company name">
+                            
+                        </div>
+                    </div>
+    
+                    </div>
+
+                    
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 18px">
+                        <div style="width: 70%; ">
+                            <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">Project Name:</label>
+                            <input style="width: 70%;" type="title" name="local" class="form-control" placeholder="Enter project name">
+                            <input type="hidden" name="members" value="1">
+                        </div>
+                    </div>
+                    
+                   
+                    
+                    
+
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 25px">
+                        <div style="width: 70%; ">
+                            <a href="/dashboard" class="btn btn-secondary">cancel</a>
+                            <button id="nextRequirements" type="submit" class="btn btn-success">create</button>
+                        </div>
+                    </div> 
+                    </form>   
+
+            </div>
+
+
+             
+        </div>
+    </div>
+
+    
+   <script>
+       document.getElementById("selectAreaOpt").addEventListener("change", openNewArea);    
+   </script>
+{% include "footer_links.html" %}
+
+</body>
+
+</html>

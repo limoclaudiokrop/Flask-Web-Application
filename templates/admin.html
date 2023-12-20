@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+ -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='spinner.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mycss/all.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <title>Admin Panel</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="topbar" style="margin-bottom: 30px;">
+            <div class="logo">
+                <h2>Admin Panel</h2>
+            </div>
+            <div class="d-flex justify-content-center align-items-center" style="display: inline-flex; margin-left: 100px;">
+                <select  id="searchAreaSelect" name="area" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                style=" padding-top: 8px; padding-bottom: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; width: 300px; text-align: center; margin-right: 10px;">
+                    <option selected value="">-- company --</option>
+                    {% for c in areas %}
+                    <option value="{{c[1]}}">{{c[1]}}</option>
+                    
+                    {% endfor %}
+                </select>      
+
+                <select  id="searchLocalSelect" name="area" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                style=" padding-top: 5px; padding-bottom: 5px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; width: 300px; text-align: center; margin-right: 10px;">
+                    <option selected value="">-- project -- </option>
+                </select>      
+
+                <button id="searchButton" onclick="filter()" type="button" class="btn" style="padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">search</button>
+                <div  id="searchLoader" style="display: none;" class="loader"></div>
+                
+              
+            </div>
+            
+              
+                <p style="white-space: nowrap; margin-left: 20px">{{welcome}}</p>
+            
+        </div>
+        <div class="sidebar">
+            <ul>
+                <li>
+                    <a href="/dashboard">
+                        <i class="fas fa-th-large"></i>
+                        <div>Dashboard</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/addProject">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <div>Add Project</div>
+                    </a>
+                </li>
+                <!-- <li>
+                    <a href="#">
+                        <i class="fas fa-users"></i>
+                        <div>Events</div>
+                    </a>
+                </li> -->
+                
+                <li>
+                    <a href="/deposit">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <div>Deposit Funds</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/withdraw">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <div>Withdraw Funds</div>
+                    </a>
+                </li>
+                
+                {% if clearance != '3' %}
+                <li>
+                    <a href="/addDirector">
+                        <i class="fas fa-user-graduate"></i>
+                        <div>Directors</div>
+                    </a>
+                </li>
+                {% endif %}
+                
+                
+                
+                <!-- <li>
+                    <a href="/summary">
+                        <i class="fas fa-chart-bar"></i>
+                        <div>Analytics</div>
+                    </a>
+                </li>
+                 -->
+                <li>
+                    <a href="/allProjects">
+                        <i class="fas fa-chart-bar"></i>
+                        <div>Projects</div> 
+                    </a>
+                </li>
+                <li>
+                    <a href="/billing">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <div>Statements</div>
+                    </a>
+                </li>
+                <!-- <li>
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <div>Settings</div>
+                    </a>
+                </li> -->
+                <li>
+                    <a href="/storage">
+                        <i class="fas fa-th-large"></i>
+                        <div>Cloud Storage</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/profile">
+                        <i class="fas fa-cog"></i>
+                        <div>My Profile</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout">
+                        <i class="fas fa-question"></i>
+                        <div>Log Out</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="main">
+            <div class="cards">
+                
+                <div class="card">
+                    <div class="card-content">
+                        <div class="number">{{companies}} </div>
+                        <div class="card-name">Companies</div>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-th-large"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="number">{{summary[1]}}</div>
+                        <div class="card-name">Directors</div>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div id="branchesNum" class="number">{{ summary[0] }}</div>
+                        <div id="branches" class="card-name"> Projects </div>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div id="totalContributions" class="number"></div>
+                        <div class="card-name">Account Balance</div>
+                    </div>
+                    <div class="icon-box">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="adminCheck" value="fresh">
+            <input type="hidden" id="hiddenBranches" value="">
+            <input type="hidden" id="hiddenMembers" value="">
+            <input type="hidden" id="hiddenContributions" value="">
+            
+            <div class="charts">
+                <div class="chart">
+                    <h2>Billings (past 12 months)</h2>
+                    <div id="lineChartDiv">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart doughnut-chart">
+                    <h2>Projects</h2>
+                    <div id="doughnutDiv">
+                        <canvas id="doughnut"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   <!--  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+     -->
+     <script type="text/javascript" src="{{ url_for('static', filename='chart.min.js') }}">
+        
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='custom.js') }}"></script>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='chart1.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='chart2.js') }}"></script>
+    
+</body>
+
+</html>

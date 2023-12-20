@@ -1,0 +1,165 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Add Director</title>
+
+    {% include "header_links.html" %}
+</head>
+
+<body>
+    <div class="wrapper">
+        <div style="background: white; height: 60px; margin: 0px; 
+    padding: 0 0px; overflow: hidden; width: 100%; position: fixed;" class="">
+        <div class="row" style="margin-left: 10px; margin-top: 5px">
+            <div class="col-3" style="margin-top: 20px">
+                <h4 style="color: green;"><strong><a href="/dashboard">Admin Panel</a></strong></h4>
+            </div>
+            <div class="col-6" style="margin-top: 10px">
+                <input style="width: 100%; height: 40px; font-size: 16px; outline: none; padding-left: 5px;
+                 border: none; border-radius: 10px; background: #f5f5f5;" type="text" name="search" placeholder="search here">
+            </div>
+            <div class="col-3 d-flex justify-content-center align-items-center" style="margin-top: 20px">
+                <p style="white-space: nowrap; color: black;">{{welcome}}</p>
+            </div>
+            
+        </div>
+    </div>
+
+        <div id="content" class="main" style="width: 100%; height: 100vh;">
+
+           <!--Main layout-->
+           {% if (error == '') %}
+            <div id="requirementDetails" style="margin-top: 80px;   width: 100%; display: none;" class="container">
+            {% else %}
+            <div id="requirementDetails" style="margin-top: 80px;   width: 100%;" class="container">
+            {% endif %}
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%">
+                        
+                        <div style="width: 70%; " class="border-bottom ">
+                            <span style="margin-left: 30px; border: 3px; font-size: 150%; font-weight: bold; color: #8c8c8c;">Director Details</span>
+                        </div>
+                        
+                        
+                    </div>
+                    <form name="createMemberForm" action="/createMember" method="post" enctype="multipart/form-data" onsubmit="return validateCreateEmployeeForm()">
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 0px">
+                        <div style="width: 70%; ">
+                        <p id="newDirectorError" style="color: red;">{{error}}</p>
+                            
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 18px">
+                        <div style="width: 70%; ">
+                            <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">First Name:</label>
+                            <input id="firstname" style="width: 70%;" type="title" name="first_name" class="form-control" placeholder="Enter First Name">
+                            
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 18px">
+                        <div style="width: 70%; ">
+                            <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">Last Name:</label>
+                            <input id="lastname" style="width: 70%;" type="title" name="second_name" class="form-control" placeholder="Enter Last Name">
+                            
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 18px">
+                        <div style="width: 70%; ">
+                            <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">Email:</label>
+                            <input id="directorEmail" style="width: 70%;" type="email"  name="email" class="form-control" placeholder="Enter email">
+                            
+                        </div>
+                    </div>
+                    {% if clearance == '2' %}
+                        <input type="hidden" name="clearance" value="3">
+                    {% elif clearance == '4' %}
+
+                        <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 18px">
+                            <div style="width: 70%; ">
+                                <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">Email:</label>
+                                <div>
+                                    <select name="clearance" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                    style="width: 70%; padding-top: 5px; padding-bottom: 5px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959">
+                                        <option selected value="3">Director</option>
+                                        <option value="2">Admin</option>
+                                    </select>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                     {% endif %}
+                    
+
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 18px">
+                        <div style="width: 70%; ">
+                            <button onclick="hideAddDirector()" type="button" class="btn btn-secondary">cancel</button>
+                            <button id="nextRequirements" type="submit" class="btn btn-success">create</button>
+                        </div>
+                    </div> 
+                    </form>   
+
+            </div>
+
+
+            <div style="margin-top: 80px;" class="container">
+                <button id="addDirectorBtn" onclick="showAddDirector()" type="button" class="btn btn-success">Add</button>
+                <table class="table table-bordered" >
+                    <tbody>
+                        <tr style="background-color: #8a8a5c; color: white;">
+                            <td colspan="5">
+                                <span>Directors</span>
+                            </td>
+                        </tr>
+                        <tr style="font-size: 105%; font-weight: bold">
+                          <td>#</td>
+                          <td>First</td>
+                          <td>Last</td>
+                          <td>Email</td>
+                          <td>Clearance</td>
+                        </tr>
+
+                        {% set count = namespace(value=1) %}
+                        {% for d in directors %}
+                            <tr>
+                                {% if d[5] != '4' %}
+                                <td>{{count.value}}</td>
+                                <td>{{d[1]}}</td>
+                                <td>{{d[2]}}</td>
+                                <td>{{d[3]}}</td>
+                                <td>
+                                    {% if d[5] == '3' %}
+                                        Director <a href="/deleteMember?email={{d[3]}}" style="color: red; margin-right: 15px;" class="tagLink font-italic ">remove</a>    
+
+                                    {% else %}
+                                        Admin
+                                    {% endif %}
+                                    
+                                    
+
+                                </td>
+                            </tr>
+                            {% set count.value = count.value + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+             
+        </div>
+    </div>
+
+    
+   
+{% include "footer_links.html" %}
+
+</body>
+
+</html>

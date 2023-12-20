@@ -1,0 +1,317 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>Storage</title>
+
+    {% include "header_links.html" %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='storage.css') }}">
+    
+       
+</head>
+
+<body>
+    <div class="wrapper">
+       <div style="background: white; height: 60px; margin: 0px; 
+    padding: 0 0px; overflow: hidden; width: 100%; position: fixed;" class="">
+        <div class="row" style="margin-left: 10px; margin-top: 5px">
+            <div class="col-2" style="margin-top: 20px">
+                <h4  style="margin-top: -5px; color: green;"><strong><a href="/dashboard">Admin Panel</a></strong></h4>
+            </div>
+            <div class="col-3">
+                <div class="mt-2" style="color: blue; font-size: 17px">
+                    {% for p,h in packed %}
+                        <a href="/storage?doc={{p}}"> - {{h}} /</a>
+                    {% endfor %}    
+                </div>
+                
+            </div>
+            <div class="col-4 d-flex justify-content-center align-items-center" style="display: inline-flex; margin-left: 50px;">
+                   
+                {% if (root == 'static/documents/Applications') %}
+                    <button disabled type="button" class="btn" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #bfbfbf; background-color: white;">New File</button>
+                    <button disabled type="button" class="btn" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #bfbfbf; background-color: white;">New Folder</button>
+                    
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#newApplicationModal" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">Create Application</button>
+                    <button disabled type="button" class="btn" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #bfbfbf; background-color: white;">Create Invoice</button>
+
+                {% elif  ('static/documents/Applications' in root) %}
+                     <button onclick="loadSelections('static/documents', '1','ozy','{{basePos}}')" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#selectFile" style="margin-top: -15px; margin-right: 5px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">New File</button>
+                    <button disabled type="button" class="btn" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #bfbfbf; background-color: white;">New Folder</button>
+                    
+                    
+                    <button disabled type="button" class="btn" style="margin-top: -15px; margin-right: 5px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #bfbfbf; background-color: white;">Create Invoice</button>
+                    <form method="POST" action="/previewapp?root={{root}}">
+
+                     <button type="submit" class="btn"  style="margin-top: 2px; margin-right: 5px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">Preview</button>
+                    </form>
+                    <form method="POST" action="/zipapp">
+                        <input type="hidden" name="root" value="{{root}}">
+                      <button type="submit" class="btn" style="margin-top: 2px; margin-right: 5px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">Zip</button>
+                    </form>
+                
+                {% else %}
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">New File</button>
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#newFolderModal" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">New Folder</button>
+                    
+                    <button disabled type="button" class="btn" data-bs-toggle="modal" data-bs-target="#newApplicationModal" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">Create Application</button>
+                    <button onclick="window.location.href='http://localhost:5000/invoice'" type="button" class="btn" style="margin-top: -15px; margin-right: 15px; padding-right: 8px; padding-left: 8px; border: 1px solid #d9d9d9; border-radius: 5px; color: #595959; background-color: white;">Create Invoice</button>
+                {% endif %}
+                
+                
+              
+            </div>
+            <div class="col-2 d-flex justify-content-center align-items-center" style="margin-top: 10px">
+                <p style="white-space: nowrap; color: black;">{{welcome}}</p>
+                <input type="hidden" name="myRoot" id="currentDirectory" value="{{root}}">
+            </div>
+            
+        </div>
+    </div>
+
+    
+        
+            <!--Main layout-->
+              <div style="display: block;   margin-top: 80px; height: 100%; width: 100%; ">
+                
+                  <div class="" >
+                      
+                    <div class="d-flex justify-content-start " style="flex-wrap: wrap; margin-right: 0; padding-right: 0; margin-left: 50px;">
+                        {% for c in dirs %}
+                        <div class="border mr-5 mb-5">
+                            <a href="/storage?doc={{root}}/{{c}}">
+                                <img src="static/folder.jpg" width="300" height="300">
+                            </a>
+                            <div>
+                                <div class="row mt-2">
+                                    <div class="col-10">
+                                        <span class="dirs" style="margin-left: 6px">{{c}}</span>
+                                    </div>
+                                    {% if (c != 'Applications') and (c != 'Invoices') %} 
+                                    <div class=" col-2 dropdown">
+                                        <object data="/static/menu-dots.svg" type="image/svg+xml"  style="height: 30px; width: 20px"> </object>
+                                      <div class="dropdown-content">
+                                        <a href="/storage?doc={{root}}/{{c}}" >Open</a>
+                                        <a onclick="populateRenameModal('{{c}}', '{{root}}/{{c}}', '{{root}}','folder')" data-bs-toggle="modal" data-bs-target="#renameModal">Rename</a>
+                                        <a href="/deletefolder?name={{root}}/{{c}}&root={{root}}">Delete</a>
+                                      </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                    {% if oz == 1 %}
+                        {% for fs,bf,af in data %}
+                            <div class="border mr-5 mb-5">
+                                <embed src="{{fs[1]}}/{{fs[2]}}" width="300" height="300" />
+                                <div>
+                                    <div class="row mt-2">
+                                        <div class="col-10">
+                                            <span style="margin-left: 6px">{{fs[2]}}</span>
+                                        </div> 
+                                        <div class=" col-2 dropdown">
+                                            <object data="/static/menu-dots.svg" type="image/svg+xml"  style="height: 30px; width: 20px"> </object>
+                                          <div class="dropdown-content">
+                                            <a onclick="loadSelections('static/documents', '1','ozy','{{bf}}')" data-bs-toggle="modal" data-bs-target="#selectFile">Insert Before</a>
+                                            <a onclick="loadSelections('static/documents', '1','ozy','{{af}}')" data-bs-toggle="modal" data-bs-target="#selectFile">Insert After</a>
+                                            <a href="{{fs[1]}}/{{fs[2]}}" target="_blank">Open</a>
+                                            <a onclick="populateRenameModal('{{fs[2]}}', '{{root}}/{{fs[2]}}', '{{root}}','file')" data-bs-toggle="modal" data-bs-target="#renameModal">Rename</a>
+                                            <a href="/deletefile?name={{root}}/{{fs[2]}}&root={{root}}&file={{fs[2]}}">Delete</a>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        {% for c in files %}
+                        
+                            <div class="border mr-5 mb-5">
+                                <embed src="{{root}}/{{c}}" width="300" height="300" />
+                                <div>
+                                    <div class="row mt-2">
+                                        <div class="col-10">
+                                            <span style="margin-left: 6px">{{c}}</span>
+                                        </div> 
+                                        <div class=" col-2 dropdown">
+                                            <object data="/static/menu-dots.svg" type="image/svg+xml"  style="height: 30px; width: 20px"> </object>
+                                          <div class="dropdown-content">
+                                            <a href="{{root}}/{{c}}" target="_blank">Open</a>
+                                            <a onclick="populateRenameModal('{{c}}', '{{root}}/{{c}}', '{{root}}','file')" data-bs-toggle="modal" data-bs-target="#renameModal">Rename</a>
+                                            <a href="/deletefile?name={{root}}/{{c}}&root={{root}}">Delete</a>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        
+
+                        {% endfor %}
+                    {% endif %}
+
+                    
+                 </div>
+
+              </div>
+        
+    </div>
+
+    
+    <!-- Modal -->
+    <form name="newFile" action="/uploadfile" method="post" enctype="multipart/form-data" onsubmit="return validateUploadFileForm()">
+    <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Upload New File</h5>
+          </div>
+          <div class="modal-body">
+            
+            <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 30px">
+                <div style="width: 70%; ">
+                    <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">Upload File:</label>
+                    <input id="uploadFile" style="width: 70%;" type="file" name="file" class="form-control" placeholder="Enter Account Name">
+                    <input type="hidden" name="path" value="{{root}}">
+                    
+                </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </form>
+
+ <!-- Modal -->
+    <form name="selectFile" action="/selectfile" method="post" enctype="multipart/form-data" onsubmit="return validateUploadFileForm()">
+    <div class="modal fade " id="selectFile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" style="width: 100%; max-width: none;height: 100%; margin: 0px !important; padding: 0px;">
+        <div class="modal-content">
+          <div class="modal-header justify-content-center">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: 600;">Select File</h5>
+          </div>
+          <div class="modal-body">
+            
+            <div id="fileCollector" class="d-flex justify-content-start " style="flex-wrap: wrap; margin-right: 0; padding-right: 0; margin-left: 50px; min-height: 300px;"></div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </form>
+
+
+   <!-- Modal -->
+    <form id="renameFileForm" name="renameFile" action="/renamefile" method="post" enctype="multipart/form-data">
+    <div class="modal fade " id="renameModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Rename File</h5>
+          </div>
+          <div class="modal-body">
+            
+            <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 30px">
+                <div style="width: 70%; ">
+                    <p id="renameFileError" style="color: red; display: none">*** Filename already exists ***</p>
+
+                    <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">Rename File:</label>
+                    <input id="renameFile" style="width: 70%;" type="text" name="filename" class="form-control" placeholder="Enter New FileName">
+                    <input type="hidden" name="path" id="renamePath">
+                    <input type="hidden" name="root" id="renameRoot">
+                    <input type="hidden" name="cat" id="renameCat">
+                    <input type="hidden" name="prevname" id="prevname">
+                    
+                </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button onclick="validaterenameFileForm('{{root}}')" type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </form>
+
+   <!-- Modal -->
+    <form name="newFolder" action="/newfolder" method="post" enctype="multipart/form-data" onsubmit="return validatenewFolderForm()">
+    <div class="modal fade " id="newFolderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Folder</h5>
+          </div>
+          <div class="modal-body">
+            
+            <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 30px">
+                <div style="width: 70%; ">
+                    <p id="newFolderError" style="color: red; display: none"></p>
+                    <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">New Folder Name:</label>
+                    <input id="newFolder" style="width: 70%;" type="text" name="foldername" class="form-control" placeholder="Enter new folder name">
+                    <input type="hidden" name="root" id="newfolderRoot" value="{{root}}">
+                </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </form>
+
+ <!-- Modal -->
+    <form name="newApplication" action="/newfolder" method="post" enctype="multipart/form-data" onsubmit="return validatenewApplicationForm()">
+    <div class="modal fade " id="newApplicationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Application</h5>
+          </div>
+          <div class="modal-body">
+            
+            <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 30px">
+                <div style="width: 70%; ">
+                    <p id="newAppError" style="color: red; display: none"></p>
+                    <label style="margin-left: 5px; color: #8c8c8c;font-size: 110%; font-weight: bold;">Application Name:</label>
+                    <input id="newApplication" style="width: 70%;" type="text" name="foldername" class="form-control" placeholder="Enter new application name">
+                    <input type="hidden" name="root" id="newAppRoot" value="{{root}}">
+                </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </form>
+
+        <script src="{{ url_for('static', filename='storage.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='bootstrap.bundle.js') }}"></script>
+
+</body>
+
+</html>

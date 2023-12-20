@@ -1,0 +1,135 @@
+   
+   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='invoicepdf.css') }}">
+
+  <div class="">
+ 	<div class="row ml-5 mt-5">
+		<div class="col-2">
+			<div class="receipt-left">
+				<img class="img-responsive" alt="iamgurdeeposahan" src="{{data['logo']}}" style="width: 150px; border-radius: 43px;">
+			</div>
+		</div>
+		<div class="col-6">
+			
+		</div>
+		<div class="col-4">
+			<div class="mt-4">
+				{% set count = namespace(value=1) %}
+				{% for c in data['sender'] %}
+					{% if count.value == 1 %}
+					<h5>{{c}}</h5>
+					{% else %}
+					<p class="ptag">{{c}}</p>
+					{% endif %}
+				{% set count.value = count.value + 1 %}
+				{% endfor %}
+				
+			</div>
+			
+		</div>
+	</div>
+
+	<div class="row ml-5 mt-5">
+		<div class="col-4">
+			<div class="receipt-right">
+				{% set count = namespace(value=1) %}
+				{% for c in data['receiver'] %}
+					{% if count.value == 1 %}
+					<h5>{{c}}</h5>
+					{% else %}
+					<p class="ptag">{{c}}</p>
+					{% endif %}
+				{% set count.value = count.value + 1 %}
+				{% endfor %}
+				
+			</div>
+		</div>
+		<div class="col-4">
+			
+		</div>
+		<div class="col-4">
+			<div class="receipt-left">
+				<h3>{{data['invoice'][0]}}</h3>
+				<p class="ptag"><b>Issue-Date :</b> {{data['invoice'][1]}}</p>
+				<p class="ptag"><b>Due-Date :</b> {{data['invoice'][2]}}</p>
+				
+			</div>
+			
+		</div>
+	</div>
+
+
+	<div class="ml-5 mt-5 mr-5 receipt-main">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="col-md-7" >Description</th>
+                    <th class="col-md-5">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+            	{% for c in data['items'] %}
+            		<tr>
+	                    <td >{{c[0]}}</td>
+	                    <td >{{c[1]}}</td>
+	                </tr>
+            	{% endfor %}
+            	{% if data['stats']|length == 1 %}
+            		<tr>
+                   
+	                    <td  class="text-right"><h6><strong>Total: </strong></h6></td>
+	                    <td class="text-left text-danger"><h6 style="display: inline-block;"><strong><i class="fa fa-inr"></i> {{data['stats'][0]}}</strong></h6></td>
+	                </tr>
+            	{% else %}
+
+
+                <tr>
+                    <td class="text-right">
+                    <p>
+                        <strong>Sub-Total Amount: </strong>
+                    </p>
+                    <p>
+                        <strong>Tax Rate: </strong>
+                    </p>
+					<p>
+                        <strong>Tax Amount: </strong>
+                    </p>
+					</td>
+                    <td>
+                    <p>
+                        <strong><i class="fa fa-inr"></i> {{data['stats'][0]}}</strong>
+                    </p>
+                    <p>
+                        <strong><i class="fa fa-inr"></i> {{data['stats'][1]}}</strong>
+                    </p>
+					<p>
+                        <strong><i class="fa fa-inr"></i> {{data['stats'][2]}}</strong>
+                    </p>
+					
+					</td>
+                </tr>
+                <tr>
+                   
+                    <td  class="text-right"><h6><strong>Total: </strong></h6></td>
+                    <td class="text-left text-danger"><h6 style="display: inline-block;"><strong><i class="fa fa-inr"></i> {{data['stats'][3]}}</strong></h6></td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row ml-5 mt-5">
+		<div class="col-4">
+			<div class="receipt-right">
+				<h5><strong>Payment Details</strong></h5>
+				<p class="ptag"><b>Account Name: </b><span>{{data['bank'][0]}}</span></p>
+				<p class="ptag"><b>Bank Name: </b><span>{{data['bank'][1]}}</span></p>
+				<p class="ptag"><b>Account Number: </b><span>{{data['bank'][2]}}</span></p>
+				<p class="ptag"><b>Routing Number: </b><span>{{data['bank'][3]}}</span></p>
+			</div>
+		</div>
+		
+	</div>
+
+ </div>
+ 

@@ -1,0 +1,32 @@
+
+.ptag {
+	margin: 0;
+	padding: 0;
+	color: #333333;
+	font-family: open sans;
+}
+
+.receipt-main thead {
+			background: #414143 none repeat scroll 0 0;
+			color: white;
+		}
+.receipt-main td {
+			padding: 9px 20px !important;
+		}
+		.receipt-main th {
+			padding: 13px 20px !important;
+		}
+		.receipt-main td {
+			font-size: 13px;
+			font-weight: initial !important;
+		}
+		.receipt-main td p:last-child {
+			margin: 0;
+			padding: 0;
+		}	
+		.receipt-main td h2 {
+			font-size: 20px;
+			font-weight: 900;
+			margin: 0;
+			text-transform: uppercase;
+		}

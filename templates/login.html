@@ -1,0 +1,71 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>login</title>
+
+    {% include "header_links.html" %}
+</head>
+
+<body>
+    <div style="background: #e6e6e6; height: 100%" class="d-flex justify-content-center align-items-center">
+        <div id="login_row" class="" style="width: 30%; height: 80%; margin-top: 50px; background: white;">
+            <div class="" style="margin-top: 50px;" >
+                 <div class="">
+                    <form action="/login" method="post">
+                    
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 18px">
+                             <h5>Please sign into your account </h6>
+                    </div>
+                    <div id="loader" style="width:100%; margin-top: 30px; display: none">
+                        <div style="width: 80%; ">
+                            
+                            <div  class="d-flex justify-content-center align-items-center">
+                                <div id="loaderDiv" class="loader"></div>
+                                    
+                            </div>
+                            <div  class="d-flex justify-content-center align-items-center">
+                                <p id="loginError" style="color: red;"></p>    
+                                    
+                            </div>
+                            
+                           
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 30px">
+                        <div style="width: 80%; ">
+                            <input style="width: 100%;" type="username" id="email" name="email" class="form-control" placeholder="username">
+                            
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="width:100%; margin-top: 25px; padding-bottom: 40px;">
+                        <div style="width: 80%; ">
+                            <input style="width: 100%; margin-bottom: 10px;" type="password" name="password" class="form-control" placeholder="password">
+                            <a onclick="forgot_password()" style="color: blue; font-size: 16;"><i>Forgot password?</i></a>
+                            <button style="width: 100%; margin-top: 40px" type="submit" class="btn btn-primary">
+                                sign in
+                            </button>
+                        
+                        </div>
+                    </div>
+
+                </form>
+                     
+                 </div>      
+            </div>
+            
+        </div>
+            
+    </div>
+
+    
+   {% include "footer_links.html" %}
+
+    
+
+</body>
+
+</html>
