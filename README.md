@@ -6,3 +6,4 @@ It supports filtering to investigate performance on company stage or aspects fro
 Moreover, it provide cloud storage for project related documents such tax documents, invoices and company certificates.
 
 ## Main Dashboard
+![png](Dashboard.png)
