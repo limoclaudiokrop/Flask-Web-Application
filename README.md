@@ -7,3 +7,19 @@ Moreover, it provide cloud storage for project related documents such tax docume
 
 ## Main Dashboard
 ![png](Dashboard.png)
+
+## Projects
+![png](Project_Description/Projects.png)
+
+## Statements
+![png](Statements.png)
+
+## Cloud Storage
+![png](Project_Description/Cloud_Storage_File_System.png)
+
+## Deposit
+![png](Project_Description/Deposit.png)
+
+## Withdraw
+![png](Project_Description/Withdraw.png)
+
